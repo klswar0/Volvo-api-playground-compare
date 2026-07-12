@@ -1,0 +1,65 @@
+
+<head>
+    <title>Volvo API Playground companion app</title>
+</head>
+
+<body>
+    <h1>Welcome to Volvo API Playground companion app</h1>
+    <h2>This site is made to compare the official Volvo API sandbox with the playground version</h2>
+    <table class="volvo-comparison-table">
+    <thead>
+        <tr>
+            <th>Feature / Aspect</th>
+            <th>Official Volvo Sandbox</th>
+            <th>Volvo API Playground</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Test Vehicles</strong></td>
+                <td>Two, statically defined demo vehicles.</td>
+                <td>Multiple predefined vehicles with diverse datasets and possibilities of creating custom vehicles.</td>
+            </tr>
+            <tr>
+                <td><strong>Interactivity</strong></td>
+                <td>Static, read-only API response examples.</td>
+                <td>Interactive environment  the virtual car reacts dynamically to your API calls.</td>
+            </tr>
+            <tr>
+                <td><strong>API Keys</strong></td>
+                <td>Single example shared with 2 predefined vehicles.</td>
+                <td>Default API keys assigned to multiple varied sample vehicles.</td>
+            </tr>
+            <tr>
+                <td><strong>Data Customization</strong></td>
+                <td>No modification allowed responses are always immutable.</td>
+                <td>Highly customizable and flexible mock vehicle data.</td>
+            </tr>
+            <tr>
+                <td><strong>Endpoint Scope</strong></td>
+                <td>Official production API fields and structures only.</td>
+                <td>Additional utility endpoints for faster testing and development.</td>
+            </tr>
+            <tr>
+                <td><strong>Scenario System</strong></td>
+                <td>No scenario system or driving simulation support.</td>
+                <td>Built-in support for templates and scenarios <span class="badge-wip" style="background:#e67e22; color:white; padding:2px 6px; font-size:11px; border-radius:3px; font-weight:bold;">Work in Progress</span>.</td>
+            </tr>
+            <tr>
+                <td><strong>Primary Purpose</strong></td>
+                <td>Simple API demonstration and structural overview.</td>
+                <td>Complete development and testing environment for Volvo Connected Vehicle apps.</td>
+            </tr>
+            <tr>
+                <td><strong>Security</strong></td>
+                <td>Manual access token generation needed (short-lived).</td>
+                <td>Token validation, OAuth 2.0 flow or PKCE can be disabled for rapid testing.</td>
+            </tr>
+        </tbody>
+    </table>
+    <h2>Are you not sure?</h2>
+    <h2>You can check the differences here:</h2>
+    <form action="/login" method="get">
+        <button type="submit">Compare</button>
+    </form>
+</body>

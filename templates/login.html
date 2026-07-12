@@ -1,0 +1,42 @@
+    
+<header>
+   <script src="https://unpkg.com/htmx.org@2.0.1/dist/htmx.min.js"></script> 
+</header>
+
+<body>
+    <h1>login to both environments</h1>
+    <h2>Plaground login</h2>
+    <p>This app will create api key and car for unofficial volvo api playground using its internal endpoints.</p>
+    {% if playground_login %}
+
+    <p>Login successful!</p>
+
+    {% else %}
+    <div>
+        <form hx-get="/login/automatic">
+            <button>click me</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <h2>Official Volvo Sandbox login</h2>
+    <p>Now the harder part you need to manually input your api key and generate a access token.</p>
+    <p>DISCLAIMER: You need to create an acoount to generate an access token.</p>
+    <p>Be fast because the token is short lived (1 hour). It needs to be refreshed regularly.</p>
+    {% if playground_login %}
+    
+    <form>
+        <input type="text" placeholder="api key"  />
+        <input type="text" placeholder="access token" />
+        <button>login</button>
+    </form>
+    {% else %}
+    <form>
+        <input type="text" placeholder="api key" disabled="True" />
+        <input type="text" placeholder="access token" disabled="True" />
+        <button  disabled="True" >login</button>
+    </form>
+    {% endif %}
+    <br>
+    <button>Ready!</button>
+</body>   
