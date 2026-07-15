@@ -15,7 +15,48 @@
     </form>
     
 
-    
-    <p>lock the car and unlock it</p>
+  
+    <form hx-get="/commands?command=lock" hx-target="#response">
+        <p>lock the car</p>
+        <input type="text" name="api_key_p" hidden="True" value="{{ api_key_p }}" />
+        <input type="text" name="api_key_v" hidden="True" value="{{ api_key_v }}" />
+        <input type="text" name="access_token" hidden="True" value="{{ access_token }}" />
+        <button >Lock the car</button>
+    </form>
+      
+    <form hx-get="/commands?command=unlock" hx-target="#response">
+        <p>unlock the car</p>
+        <input type="text" name="api_key_p" hidden="True" value="{{ api_key_p }}" />
+        <input type="text" name="api_key_v" hidden="True" value="{{ api_key_v }}" />
+        <input type="text" name="access_token" hidden="True" value="{{ access_token }}" />
+        <button >Unlock the car</button>
+    </form>
+
+    <form hx-get="/commands?command=engine" hx-target="#response">
+        <p>get stats of engine </p>
+        <input type="text" name="api_key_p" hidden="True" value="{{ api_key_p }}" />
+        <input type="text" name="api_key_v" hidden="True" value="{{ api_key_v }}" />
+        <input type="text" name="access_token" hidden="True" value="{{ access_token }}" />
+        <button >Get engine status</button>
+    </form>
+
+
+    <form hx-get="/commands?command=engineStart" hx-target="#response">
+        <p>Start the engine </p>
+        <input type="text" name="api_key_p" hidden="True" value="{{ api_key_p }}" />
+        <input type="text" name="api_key_v" hidden="True" value="{{ api_key_v }}" />
+        <input type="text" name="access_token" hidden="True" value="{{ access_token }}" />
+        <button >Start the engine</button>
+    </form>
+
+    <form hx-get="/commands?command=engineStop" hx-target="#response">
+        <p>Stop the engine </p>
+        <input type="text" name="api_key_p" hidden="True" value="{{ api_key_p }}" />
+        <input type="text" name="api_key_v" hidden="True" value="{{ api_key_v }}" />
+        <input type="text" name="access_token" hidden="True" value="{{ access_token }}" />
+        <button >Stop the engine</button>
+    </form>
+
+
     <div id="response"></div>
 </body>

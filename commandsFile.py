@@ -1,6 +1,7 @@
 from app_config import officialURL, unofficialURL, VINofficial, VINunofficial
 import requests
 
+#post version needed
 def sendOfficialRequest(url: str, headers: dict):
     try:
         response = requests.get(f"{officialURL}{url}", headers=headers)
@@ -34,6 +35,33 @@ def get_locks(api_key_v: str, access_token: str,api_key_p: str):
     headers = headersGen(api_key_v, access_token)
     successOfficial, responseOfficial = sendOfficialRequest(url, headers)
     url= f"/vehicles/{VINunofficial}/doors"
+    headers=headersGen(api_key_p, "NOT NEEDED")
+    successUnofficial, responseUnofficial = sendUnofficialRequest(url, headers)
+    return responseOfficial, responseUnofficial
+
+def lock(api_key_v: str, access_token: str, api_key_p: str):
+    url = f"/vehicles/{VINofficial}/commands/lock"
+    headers = headersGen(api_key_v, access_token)
+    successOfficial, responseOfficial = sendOfficialRequest(url, headers)
+    url= f"/vehicles/{VINunofficial}/commands/lock"
+    headers=headersGen(api_key_p, "NOT NEEDED")
+    successUnofficial, responseUnofficial = sendUnofficialRequest(url, headers)
+    return responseOfficial, responseUnofficial
+
+def unlock(api_key_v: str, access_token: str, api_key_p: str):
+    url = f"/vehicles/{VINofficial}/commands/unlock"
+    headers = headersGen(api_key_v, access_token)
+    successOfficial, responseOfficial = sendOfficialRequest(url, headers)
+    url= f"/vehicles/{VINunofficial}/commands/unlock"
+    headers=headersGen(api_key_p, "NOT NEEDED")
+    successUnofficial, responseUnofficial = sendUnofficialRequest(url, headers)
+    return responseOfficial, responseUnofficial
+
+def get_engine_status(api_key_v: str, access_token: str, api_key_p: str):
+    url = f"/vehicles/{VINofficial}/engine-status"
+    headers = headersGen(api_key_v, access_token)
+    successOfficial, responseOfficial = sendOfficialRequest(url, headers)
+    url= f"/vehicles/{VINunofficial}/engine-status"
     headers=headersGen(api_key_p, "NOT NEEDED")
     successUnofficial, responseUnofficial = sendUnofficialRequest(url, headers)
     return responseOfficial, responseUnofficial

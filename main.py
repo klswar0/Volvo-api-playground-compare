@@ -60,7 +60,7 @@ def login_automatic():
         if response.status_code != 200:
             return JSONResponse(content={"error": "Failed to add car.","detail": response.json()}) #html
         response=Response()
-        response.headers["HX-Redirect"] = f"/login?api_key={api_key}&state=1"
+        response.headers["HX-Redirect"] = f"/login?api_key_v={api_key}&state=1"
         return response
     except Exception as e:
         return JSONResponse(content={"error": str(e)})
@@ -88,7 +88,7 @@ def login_manual(api_key_v: str, access_token: str, api_key_p: str):
     except Exception as e:
         return JSONResponse(content={"error": str(e)})
     
-
+#compare is not going thru and api_key_p is set to None api key is repaired check
 @app.get("/compare")
 def compare(request: Request, api_key_v: str, access_token: str , api_key_p: str):
     return templates.TemplateResponse(
@@ -99,9 +99,20 @@ def compare(request: Request, api_key_v: str, access_token: str , api_key_p: str
 
 
 @app.get("/commands")
-def get_commands(api_key_v: str, access_token: str , api_key_p: str , command: str):
+def get_commands(request: Request,api_key_v: str, access_token: str , api_key_p: str , command: str):
     if command == "locks":
-        return commandsFile.get_locks(api_key_v, access_token, api_key_p)
+        responses = commandsFile.get_locks(api_key_v, access_token, api_key_p)
+    elif command == "lock":
+        responses = commandsFile.lock(api_key_v, access_token, api_key_p)
+    elif command == "unlock":
+        responses = commandsFile.unlock(api_key_v, access_token, api_key_p)
+    elif command == "engine_status":
+        responses = commandsFile.get_engine_status(api_key_v, access_token, api_key_p)
+    return templates.TemplateResponse(
+            name="terminalOutput.html",
+            context={"responses": responses, "official_response": responses[0], "unofficial_response": responses[1]},
+            request=request
+        )
     
 
 uvicorn.run(app,port=8001)
