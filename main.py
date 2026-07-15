@@ -5,13 +5,12 @@ from fastapi import FastAPI, Query, Response, Request, Header
 from fastapi.responses import JSONResponse, FileResponse
 import requests
 import json
+import commandsFile
+from app_config import officialURL, unofficialURL, VINofficial, VINunofficial
 
 app = FastAPI()
 
 templates = Jinja2Templates(directory="templates")
-
-page="http://localhost:8000"
-
 
 class auth(BaseModel):
     api_key_play: str = Field(...) 
@@ -44,7 +43,7 @@ def login(request: Request, api_key_p: str = Query(default=None),api_key_v: str 
 @app.get("/login/automatic")
 def login_automatic():
     try:
-        url=f"{page}/internal/APIKey"
+        url=f"{unofficialURL}/internal/APIKey"
         response = requests.get(url)
         api_key = response.json().get("message")
         print(f"Retrieved API key: {api_key}")
@@ -53,9 +52,9 @@ def login_automatic():
     except Exception as e:
         return JSONResponse(content={"error": str(e)})
     try:
-        url=f"{page}/internal/addCar"
+        url=f"{unofficialURL}/internal/addCar"
         header = {"vcc-api-key": api_key}
-        body={"VIN": "YV1RZ4CL3M1000001DEMO",
+        body={"VIN": VINunofficial,
             "attributes": {"fuelICE": 120, "fuelElectric": 80, "odometer": 10000, "oillevel": "TOO_LOW", "hazardLightsWarning": "FAILURE","frontLeft": "VERY_LOW_PRESSURE","frontRight": "LOW_PRESSURE","rearLeft": "UNSPECIFIED","rearRight": "NO_WARNING"}}
         response = requests.post(url, headers=header, json=body)
         if response.status_code != 200:
@@ -71,7 +70,7 @@ def login_automatic():
 @app.get("/login/manual")
 def login_manual(api_key_v: str, access_token: str, api_key_p: str):
     try:
-        url=f"https://api.volvocars.com/connected-vehicle/v2/vehicles"
+        url=f"{officialURL}/vehicles"
         token = access_token.strip()
         if not token.startswith("Bearer "):
             token = f"Bearer {token}"
@@ -89,4 +88,20 @@ def login_manual(api_key_v: str, access_token: str, api_key_p: str):
     except Exception as e:
         return JSONResponse(content={"error": str(e)})
     
+
+@app.get("/compare")
+def compare(request: Request, api_key_v: str, access_token: str , api_key_p: str):
+    return templates.TemplateResponse(
+        name="compare.html",
+        context={"api_key_v": api_key_v, "access_token": access_token, "api_key_p": api_key_p},
+        request=request
+    )
+
+
+@app.get("/commands")
+def get_commands(api_key_v: str, access_token: str , api_key_p: str , command: str):
+    if command == "locks":
+        return commandsFile.get_locks(api_key_v, access_token, api_key_p)
+    
+
 uvicorn.run(app,port=8001)
