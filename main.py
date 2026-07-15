@@ -27,10 +27,16 @@ def index():
     return FileResponse("templates/index.html")
 
 @app.get("/login")
-def login(request: Request, api_key: str = Query(default=None), playground_login: bool = Query(default=False)):
+def login(request: Request, api_key_p: str = Query(default=None),api_key_v: str = Query(default=None), access_token: str = Query(default=None), state: int = Query(default=0)):
+    if state == 0:
+        data={"api_key_p": None, "api_key_v": None, "access_token": None, "state": state}
+    elif state == 1:
+        data={"api_key_p": api_key_p, "api_key_v": None, "access_token": None, "state": state}
+    elif state == 2:
+        data={"api_key_p": None, "api_key_v": api_key_v, "access_token": access_token, "state": state}
     return templates.TemplateResponse(
         name="login.html",
-        context={"api_key": api_key, "playground_login": playground_login},
+        context=data,
         request=request
     )
 
@@ -55,7 +61,7 @@ def login_automatic():
         if response.status_code != 200:
             return JSONResponse(content={"error": "Failed to add car.","detail": response.json()}) #html
         response=Response()
-        response.headers["HX-Redirect"] = f"/login?api_key={api_key}&playground_login=True"
+        response.headers["HX-Redirect"] = f"/login?api_key={api_key}&state=1"
         return response
     except Exception as e:
         return JSONResponse(content={"error": str(e)})
@@ -63,15 +69,23 @@ def login_automatic():
     return JSONResponse(content={"message": "Automatic login successful. Car added."})
 
 @app.get("/login/manual")
-def login_manual(api_key: str, access_token: str):
+def login_manual(api_key_v: str, access_token: str, api_key_p: str):
     try:
         url=f"https://api.volvocars.com/connected-vehicle/v2/vehicles"
-        headers = {"vcc_api_key": api_key, "Authorization": access_token}
+        token = access_token.strip()
+        if not token.startswith("Bearer "):
+            token = f"Bearer {token}"
+        headers = {"VCC-API-KEY": api_key_v, "Authorization": token}
         response = requests.get(url, headers=headers)
         vehicles = response.json()
+        print(f"Retrieved vehicles: {vehicles}")
         # Check if the response contains vehicles or an error message
+        if response.status_code != 200:
+            return JSONResponse(content={"error": "Failed to retrieve vehicles.","detail": vehicles}) #html
 
-        return JSONResponse(content={"Check": True})
+        response=Response()
+        response.headers["HX-Redirect"] = f"/login?api_key_p={api_key_p}&api_key_v={api_key_v}&access_token={access_token}&state=2"
+        return response
     except Exception as e:
         return JSONResponse(content={"error": str(e)})
     

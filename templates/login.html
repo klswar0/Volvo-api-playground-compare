@@ -7,7 +7,7 @@
     <h1>login to both environments</h1>
     <h2>Plaground login</h2>
     <p>This app will create api key and car for unofficial volvo api playground using its internal endpoints.</p>
-    {% if playground_login %}
+    {% if state == 1 %}
 
     <p>Login successful!</p>
 
@@ -23,13 +23,20 @@
     <p>Now the harder part you need to manually input your api key and generate a access token.</p>
     <p>DISCLAIMER: You need to create an acoount to generate an access token.</p>
     <p>Be fast because the token is short lived (1 hour). It needs to be refreshed regularly.</p>
-    {% if playground_login %}
+    {% if state == 1 %}
     
-    <form>
-        <input type="text" placeholder="api key"  />
-        <input type="text" placeholder="access token" />
+    <form hx-get="/login/manual">
+        <input type="text" placeholder="api key" hidden="True" value="{{ api_key_p }}" />
+        <input type="text" placeholder="api key"  name="api_key_v"/>
+        <input type="text" placeholder="access token" name="access_token"/>
         <button>login</button>
     </form>
+    {% elif state == 2 %}
+     <form>
+    <input type="text" placeholder="api key" disabled="True" value="{{ api_key_v }}" />
+    <input type="text" placeholder="access token" disabled="True" value="{{ access_token }}" />
+    <p>Manual login successful!</p>
+    
     {% else %}
     <form>
         <input type="text" placeholder="api key" disabled="True" />
@@ -38,5 +45,7 @@
     </form>
     {% endif %}
     <br>
-    <button>Ready!</button>
+    <form action="/compare?api_key_v={{ api_key_v }}&access_token={{ access_token }}&api_key_p={{ api_key_p }}" method="get" >
+        <button type="submit" {% if state != 2 %} disabled="True" {% endif %} >Ready!</button>
+    </form>
 </body>   
