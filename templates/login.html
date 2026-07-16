@@ -36,6 +36,7 @@
     <input type="text" placeholder="api key" disabled="True" value="{{ api_key_v }}" />
     <input type="text" placeholder="access token" disabled="True" value="{{ access_token }}" />
     <p>Manual login successful!</p>
+    </form>
     
     {% else %}
     <form>
@@ -45,7 +46,12 @@
     </form>
     {% endif %}
     <br>
-    <form action="/compare?api_key_v={{ api_key_v }}&access_token={{ access_token }}&api_key_p={{ api_key_p }}" method="get" >
+
+    <form action="/compare" method="get">
+        <input type="hidden" name="api_key_v" value="{{ api_key_v }}">
+        <input type="hidden" name="access_token" value="{{ access_token }}">
+        <input type="hidden" name="api_key_p" value="{{ api_key_p }}">
+
         <button type="submit" {% if state != 2 %} disabled="True" {% endif %} >Ready!</button>
     </form>
 </body>   

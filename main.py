@@ -32,7 +32,7 @@ def login(request: Request, api_key_p: str = Query(default=None),api_key_v: str 
     elif state == 1:
         data={"api_key_p": api_key_p, "api_key_v": None, "access_token": None, "state": state}
     elif state == 2:
-        data={"api_key_p": None, "api_key_v": api_key_v, "access_token": access_token, "state": state}
+        data={"api_key_p": api_key_p, "api_key_v": api_key_v, "access_token": access_token, "state": state}
     return templates.TemplateResponse(
         name="login.html",
         context=data,
@@ -60,7 +60,7 @@ def login_automatic():
         if response.status_code != 200:
             return JSONResponse(content={"error": "Failed to add car.","detail": response.json()}) #html
         response=Response()
-        response.headers["HX-Redirect"] = f"/login?api_key_v={api_key}&state=1"
+        response.headers["HX-Redirect"] = f"/login?api_key_p={api_key}&state=1"
         return response
     except Exception as e:
         return JSONResponse(content={"error": str(e)})
@@ -106,7 +106,7 @@ def get_commands(request: Request,api_key_v: str, access_token: str , api_key_p:
         responses = commandsFile.lock(api_key_v, access_token, api_key_p)
     elif command == "unlock":
         responses = commandsFile.unlock(api_key_v, access_token, api_key_p)
-    elif command == "engine_status":
+    elif command == "engine":
         responses = commandsFile.get_engine_status(api_key_v, access_token, api_key_p)
     return templates.TemplateResponse(
             name="terminalOutput.html",

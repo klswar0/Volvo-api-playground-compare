@@ -2,9 +2,12 @@ from app_config import officialURL, unofficialURL, VINofficial, VINunofficial
 import requests
 
 #post version needed
-def sendOfficialRequest(url: str, headers: dict):
+def sendOfficialRequest(url: str, headers: dict,method: str = "GET"):
     try:
-        response = requests.get(f"{officialURL}{url}", headers=headers)
+        if method == "POST":
+            response = requests.post(f"{officialURL}{url}", headers=headers)
+        else:
+            response = requests.get(f"{officialURL}{url}", headers=headers)
         if response.status_code != 200:
             if response.status_code == 401:
                 return False, {"error": "Unauthorized access. Please check your API key and access token."}
@@ -13,9 +16,12 @@ def sendOfficialRequest(url: str, headers: dict):
     except Exception as e:
         return False, {"error": str(e)}
 
-def sendUnofficialRequest(url: str, headers: dict):
+def sendUnofficialRequest(url: str, headers: dict,method: str = "GET"):
     try:
-        response = requests.get(f"{unofficialURL}{url}", headers=headers)
+        if method == "POST":
+            response = requests.post(f"{unofficialURL}{url}", headers=headers)
+        else:
+            response = requests.get(f"{unofficialURL}{url}", headers=headers)
         if response.status_code != 200:
             return False,{"error": "Failed to retrieve data from unofficial API.", "detail": response.json()}
         return True, response.json()
@@ -42,19 +48,19 @@ def get_locks(api_key_v: str, access_token: str,api_key_p: str):
 def lock(api_key_v: str, access_token: str, api_key_p: str):
     url = f"/vehicles/{VINofficial}/commands/lock"
     headers = headersGen(api_key_v, access_token)
-    successOfficial, responseOfficial = sendOfficialRequest(url, headers)
+    successOfficial, responseOfficial = sendOfficialRequest(url, headers, method="POST")
     url= f"/vehicles/{VINunofficial}/commands/lock"
     headers=headersGen(api_key_p, "NOT NEEDED")
-    successUnofficial, responseUnofficial = sendUnofficialRequest(url, headers)
+    successUnofficial, responseUnofficial = sendUnofficialRequest(url, headers, method="POST")
     return responseOfficial, responseUnofficial
 
 def unlock(api_key_v: str, access_token: str, api_key_p: str):
     url = f"/vehicles/{VINofficial}/commands/unlock"
     headers = headersGen(api_key_v, access_token)
-    successOfficial, responseOfficial = sendOfficialRequest(url, headers)
+    successOfficial, responseOfficial = sendOfficialRequest(url, headers, method="POST")
     url= f"/vehicles/{VINunofficial}/commands/unlock"
     headers=headersGen(api_key_p, "NOT NEEDED")
-    successUnofficial, responseUnofficial = sendUnofficialRequest(url, headers)
+    successUnofficial, responseUnofficial = sendUnofficialRequest(url, headers, method="POST")
     return responseOfficial, responseUnofficial
 
 def get_engine_status(api_key_v: str, access_token: str, api_key_p: str):
