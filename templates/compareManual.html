@@ -1,0 +1,29 @@
+    
+<header>
+   <script src="https://unpkg.com/htmx.org@2.0.1/dist/htmx.min.js"></script> 
+</header>
+
+<body>
+
+    <h1>Compare both environments</h1>
+    <h3>Manual Mode</h3>
+    <form hx-get="/manual/command" hx-target="#response">
+        <input type="text" name="api_key_p" hidden="True" value="{{ api_key_p }}" />
+        <input type="text" name="api_key_v" hidden="True" value="{{ api_key_v }}" />
+        <input type="text" name="access_token" hidden="True" value="{{ access_token }}" />
+        <p>Method:</p>
+        <select name="method">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+        </select>
+        <p>URL:</p>
+        <p>Example: /vehicles/{VIN}/engine-status</p>
+        <input type="text" placeholder="URL" name="url"/>
+        <p>INFO Dont change {VIN}</p>
+        <p>Body (if needed)</p>
+        <textarea name="body" rows="4" cols="50"></textarea>
+        <button>Send command</button>
+    </form>
+
+    <div id="response"></div>
+</body>

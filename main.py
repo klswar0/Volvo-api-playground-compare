@@ -108,11 +108,28 @@ def get_commands(request: Request,api_key_v: str, access_token: str , api_key_p:
         responses = commandsFile.unlock(api_key_v, access_token, api_key_p)
     elif command == "engine":
         responses = commandsFile.get_engine_status(api_key_v, access_token, api_key_p)
+    elif command == "engineStart":
+        responses = commandsFile.engine_start(api_key_v, access_token, api_key_p)
+    elif command == "engineStop":
+        responses = commandsFile.engine_stop(api_key_v, access_token, api_key_p)
     return templates.TemplateResponse(
             name="terminalOutput.html",
             context={"responses": responses, "official_response": responses[0], "unofficial_response": responses[1]},
             request=request
         )
     
+
+@app.get("/manual")
+def manual(request: Request, api_key_v: str, access_token: str , api_key_p: str):
+    return templates.TemplateResponse(
+        name="compareManual.html",
+        context={"api_key_v": api_key_v, "access_token": access_token, "api_key_p": api_key_p, "VINofficial": VINofficial, "VINunofficial": VINunofficial},
+        request=request
+    )
+
+@app.get("/manual/command")
+def manual_command(request: Request, api_key_v: str, access_token: str , api_key_p: str, url: str, method: str = "GET", body: str = None):
+    return commandsFile.manual_command(api_key_v, access_token, api_key_p, url, method, body)
+
 
 uvicorn.run(app,port=8001)

@@ -2,10 +2,10 @@ from app_config import officialURL, unofficialURL, VINofficial, VINunofficial
 import requests
 
 #post version needed
-def sendOfficialRequest(url: str, headers: dict,method: str = "GET"):
+def sendOfficialRequest(url: str, headers: dict,method: str = "GET",body: dict = None):
     try:
         if method == "POST":
-            response = requests.post(f"{officialURL}{url}", headers=headers)
+            response = requests.post(f"{officialURL}{url}", headers=headers, json=body)
         else:
             response = requests.get(f"{officialURL}{url}", headers=headers)
         if response.status_code != 200:
@@ -16,10 +16,10 @@ def sendOfficialRequest(url: str, headers: dict,method: str = "GET"):
     except Exception as e:
         return False, {"error": str(e)}
 
-def sendUnofficialRequest(url: str, headers: dict,method: str = "GET"):
+def sendUnofficialRequest(url: str, headers: dict,method: str = "GET",body: dict = None):
     try:
         if method == "POST":
-            response = requests.post(f"{unofficialURL}{url}", headers=headers)
+            response = requests.post(f"{unofficialURL}{url}", headers=headers, json=body)
         else:
             response = requests.get(f"{unofficialURL}{url}", headers=headers)
         if response.status_code != 200:
@@ -72,5 +72,31 @@ def get_engine_status(api_key_v: str, access_token: str, api_key_p: str):
     successUnofficial, responseUnofficial = sendUnofficialRequest(url, headers)
     return responseOfficial, responseUnofficial
 
+def engine_start(api_key_v: str, access_token: str, api_key_p: str):
+    body = {"runtimeMinutes": 10} 
+    url = f"/vehicles/{VINofficial}/commands/engine-start"
+    headers = headersGen(api_key_v, access_token)
+    successOfficial, responseOfficial = sendOfficialRequest(url, headers, method="POST", body=body)
+    url= f"/vehicles/{VINunofficial}/commands/engine-start"
+    headers=headersGen(api_key_p, "NOT NEEDED")
+    successUnofficial, responseUnofficial = sendUnofficialRequest(url, headers, method="POST", body=body)
+    return responseOfficial, responseUnofficial
 
-    
+def engine_stop(api_key_v: str, access_token: str, api_key_p: str):
+    url = f"/vehicles/{VINofficial}/commands/engine-stop"
+    headers = headersGen(api_key_v, access_token)
+    successOfficial, responseOfficial = sendOfficialRequest(url, headers, method="POST")
+    url= f"/vehicles/{VINunofficial}/commands/engine-stop"
+    headers=headersGen(api_key_p, "NOT NEEDED")
+    successUnofficial, responseUnofficial = sendUnofficialRequest(url, headers, method="POST")
+    return responseOfficial, responseUnofficial
+
+def manual_command( api_key_v: str, access_token: str , api_key_p: str, url: str, method: str = "GET", body: str = None):
+    headers = headersGen(api_key_v, access_token)
+    url_official = url.replace("{VIN}", VINofficial)
+    url_unofficial = url.replace("{VIN}", VINunofficial)
+    body = body.replace("\n", "").replace("\\", "")
+    successOfficial, responseOfficial = sendOfficialRequest(url_official, headers, method=method, body=body)
+    headers=headersGen(api_key_p, "NOT NEEDED")
+    successUnofficial, responseUnofficial = sendUnofficialRequest(url_unofficial, headers, method=method, body=body)
+    return responseOfficial, responseUnofficial
