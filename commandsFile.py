@@ -1,3 +1,5 @@
+import json
+
 from app_config import officialURL, unofficialURL, VINofficial, VINunofficial
 import requests
 
@@ -5,6 +7,8 @@ import requests
 def sendOfficialRequest(url: str, headers: dict,method: str = "GET",body: dict = None):
     try:
         if method == "POST":
+            if body:
+                body=json.loads(body)
             response = requests.post(f"{officialURL}{url}", headers=headers, json=body)
         else:
             response = requests.get(f"{officialURL}{url}", headers=headers)
@@ -19,6 +23,8 @@ def sendOfficialRequest(url: str, headers: dict,method: str = "GET",body: dict =
 def sendUnofficialRequest(url: str, headers: dict,method: str = "GET",body: dict = None):
     try:
         if method == "POST":
+            if body:
+                body=json.loads(body)
             response = requests.post(f"{unofficialURL}{url}", headers=headers, json=body)
         else:
             response = requests.get(f"{unofficialURL}{url}", headers=headers)
@@ -95,7 +101,6 @@ def manual_command( api_key_v: str, access_token: str , api_key_p: str, url: str
     headers = headersGen(api_key_v, access_token)
     url_official = url.replace("{VIN}", VINofficial)
     url_unofficial = url.replace("{VIN}", VINunofficial)
-    body = body.replace("\n", "").replace("\\", "")
     successOfficial, responseOfficial = sendOfficialRequest(url_official, headers, method=method, body=body)
     headers=headersGen(api_key_p, "NOT NEEDED")
     successUnofficial, responseUnofficial = sendUnofficialRequest(url_unofficial, headers, method=method, body=body)
