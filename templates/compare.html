@@ -1,11 +1,13 @@
-    
+<!DOCTYPE html>   
 <header>
    <script src="https://unpkg.com/htmx.org@2.0.1/dist/htmx.min.js"></script> 
+   <link rel="stylesheet" href="compare.css">
 </header>
 
 <body>
     <h1>Compare both environments</h1>
     <h3>select an action and both responses will be given</h3>
+    <div class="forms">
     <form hx-get="/commands?command=locks" hx-target="#response">
         <p>Get locks and doors status</p>
         <input type="text" name="api_key_p" hidden="True" value="{{ api_key_p }}" />
@@ -57,11 +59,37 @@
         <button >Stop the engine</button>
     </form>
 
+
+    <form hx-get="/commands?command=windows" hx-target="#response">
+        <p>Get window status </p>
+        <input type="text" name="api_key_p" hidden="True" value="{{ api_key_p }}" />
+        <input type="text" name="api_key_v" hidden="True" value="{{ api_key_v }}" />
+        <input type="text" name="access_token" hidden="True" value="{{ access_token }}" />
+        <button >Get window status</button>
+    </form>
+    </div>
+
+    <div class="manual-mode">
     <p>This are not all requests available </p>
     <button>Try manual mode</button>
     <p>Use official or unofficial Docs to know what commands are available</p>
-
-    <div id="response"></div>
+    </div> 
+    <div id="response">
+        <table class="volvo-comparison-table" border="1">
+            <tr>
+                <th>Official Volvo Sandbox</th>
+                <th>Volvo API Playground</th>
+            </tr>  
+            <tr>
+                <td><div id="OFFICIALoutput">
+                    <p>Official response will be shown here</p>
+                </div></td>
+                <td><div id="UNOFFICIALoutput">
+                    <p>Unofficial response will be shown here</p>
+                </div></td>
+            </tr>
+        </table>
+    </div>
 
 
 
