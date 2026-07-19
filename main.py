@@ -112,6 +112,8 @@ def get_commands(request: Request,api_key_v: str, access_token: str , api_key_p:
         responses = commandsFile.engine_start(api_key_v, access_token, api_key_p)
     elif command == "engineStop":
         responses = commandsFile.engine_stop(api_key_v, access_token, api_key_p)
+    elif command == "windows":
+        responses = commandsFile.get_windows(api_key_v, access_token, api_key_p)
     return templates.TemplateResponse(
             name="terminalOutput.html",
             context={"responses": responses, "official_response": responses[0], "unofficial_response": responses[1]},

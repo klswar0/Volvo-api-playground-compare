@@ -97,6 +97,21 @@ def engine_stop(api_key_v: str, access_token: str, api_key_p: str):
     successUnofficial, responseUnofficial = sendUnofficialRequest(url, headers, method="POST")
     return responseOfficial, responseUnofficial
 
+def get_windows(api_key_v: str, access_token: str, api_key_p: str):
+    url = f"/vehicles/{VINofficial}/windows"
+    headers = headersGen(api_key_v, access_token)
+    successOfficial, responseOfficial = sendOfficialRequest(url, headers)
+    url= f"/vehicles/{VINunofficial}/windows"
+    headers=headersGen(api_key_p, "NOT NEEDED")
+    successUnofficial, responseUnofficial = sendUnofficialRequest(url, headers)
+    return responseOfficial, responseUnofficial
+
+
+
+
+
+
+
 def manual_command( api_key_v: str, access_token: str , api_key_p: str, url: str, method: str = "GET", body: str = None):
     headers = headersGen(api_key_v, access_token)
     url_official = url.replace("{VIN}", VINofficial)
