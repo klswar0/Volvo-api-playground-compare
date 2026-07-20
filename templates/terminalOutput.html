@@ -1,11 +1,33 @@
-<div id="response">
+<div id="response" class="lg:col-span-3 mt-4 space-y-3">
+    <h2 class="text-lg font-bold text-zinc-300 tracking-wide uppercase text-xs">Live Raw Output Feed</h2>
 
-    <div id="OFFICIALoutput">
-        {{ official_response }}
+    <div class="overflow-hidden border border-zinc-800 rounded-xl bg-zinc-900/20 backdrop-blur-sm shadow-2xl">
+        <table class="w-full border-collapse text-left">
+            <thead>
+                <tr class="border-b border-zinc-800 bg-zinc-900/60 text-xs font-semibold tracking-wider uppercase">
+                    <th class="p-4 w-1/2 text-blue-400 border-r border-zinc-800/60">Official Volvo Sandbox Feed
+                    </th>
+                    <th class="p-4 w-1/2 text-indigo-400">Volvo API Playground Feed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+
+                    <td class="p-4 align-top border-r border-zinc-800/60 bg-zinc-950/40">
+                        <div id="OFFICIALoutput"
+                            class="font-mono text-xs text-zinc-400 min-h-[120px] leading-relaxed whitespace-pre-wrap">
+                            <p class="text-green-400">{{ official_response }}</p>
+                        </div>
+                    </td>
+                    <!-- Unofficial Playground Output Panel -->
+                    <td class="p-4 align-top bg-zinc-950/40">
+                        <div id="UNOFFICIALoutput"
+                            class="font-mono text-xs text-zinc-400 min-h-[120px] leading-relaxed whitespace-pre-wrap">
+                            <p class="text-green-400">{{ unofficial_response }}</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-
-    <div id="UNOFFICIALoutput">
-        {{ unofficial_response }}
-    </div>
-
 </div>

@@ -1,29 +1,125 @@
-    
-<header>
-   <script src="https://unpkg.com/htmx.org@2.0.1/dist/htmx.min.js"></script> 
-</header>
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-zinc-950">
 
-<body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <h1>Compare both environments</h1>
-    <h3>Manual Mode</h3>
-    <form hx-get="/manual/command" hx-target="#response">
-        <input type="text" name="api_key_p" hidden="True" value="{{ api_key_p }}" />
-        <input type="text" name="api_key_v" hidden="True" value="{{ api_key_v }}" />
-        <input type="text" name="access_token" hidden="True" value="{{ access_token }}" />
-        <p>Method:</p>
-        <select name="method">
-            <option value="GET">GET</option>
-            <option value="POST">POST</option>
-        </select>
-        <p>URL:</p>
-        <p>Example: /vehicles/{VIN}/engine-status</p>
-        <input type="text" placeholder="URL" name="url"/>
-        <p>INFO Dont change {VIN}</p>
-        <p>Body (if needed)</p>
-        <textarea name="body" rows="4" cols="50"></textarea>
-        <button>Send command</button>
-    </form>
+    <title>Compare Environments - Volvo API Playground</title>
+    <script src="https://unpkg.com/htmx.org@2.0.1/dist/htmx.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-    <div id="response"></div>
+</head>
+
+<body class="min-h-full font-sans antialiased text-zinc-200 bg-zinc-950 flex flex-col items-center p-6 md:p-12">
+    <header class="max-w-4xl w-full text-center mb-12 space-y-4">
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white">Compare both environments</h1>
+        <p class="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto font-medium">Manual Mode</p>
+    </header>
+    <main class="max-w-xl w-full mx-auto p-1">
+
+        <div class="p-6 bg-zinc-900/40 border border-zinc-800 rounded-2xl shadow-xl backdrop-blur-sm space-y-6">
+
+            <form hx-get="/manual/command" hx-target="#response" class="space-y-4">
+
+                <input type="hidden" name="api_key_p" value="{{ api_key_p }}" />
+                <input type="hidden" name="api_key_v" value="{{ api_key_v }}" />
+                <input type="hidden" name="access_token" value="{{ access_token }}" />
+
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-medium text-zinc-400 tracking-wide uppercase">HTTP Method</label>
+                    <div class="relative">
+                        <select name="method"
+                            class="w-full px-3.5 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-sm text-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all cursor-pointer appearance-none">
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                        </select>
+
+                        <div
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-zinc-500">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="space-y-1.5">
+                    <div class="flex justify-between items-baseline">
+                        <label class="text-xs font-medium text-zinc-400 tracking-wide uppercase">Request URL</label>
+                        <span class="text-[10px] text-zinc-500 font-mono">Example: /vehicles/{VIN}/engine-status</span>
+                    </div>
+                    <input type="text" placeholder="/vehicles/{VIN}/..." name="url" required
+                        class="w-full px-3.5 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-sm text-zinc-100 placeholder-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all font-mono" />
+
+
+                    <div
+                        class="flex items-center gap-1.5 px-3 py-2 bg-amber-500/5 border border-amber-500/10 rounded-lg text-xs text-amber-400/90 leading-normal">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>
+                        <span><strong>System Info:</strong> Keep the literal <code
+                                class="font-mono text-white bg-zinc-950 px-1 py-0.5 rounded border border-zinc-800">{VIN}</code>
+                            placeholder intact. The environment proxy will replace it dynamically.</span>
+                    </div>
+                </div>
+
+                <!-- Payload Body Textarea -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-medium text-zinc-400 tracking-wide uppercase">Request Body <span
+                            class="text-zinc-600 text-[11px] lowercase italic">(optional)</span></label>
+                    <textarea name="body" rows="4" placeholder='{&#10;  "key": "value"&#10;}'
+                        class="w-full px-3.5 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-sm text-zinc-200 placeholder-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all font-mono resize-y"></textarea>
+                </div>
+
+                <!-- Action Button -->
+                <button type="submit"
+                    class="w-full mt-2 py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium rounded-xl shadow-lg shadow-indigo-600/10 hover:shadow-indigo-600/20 active:scale-[0.99] transition-all duration-150 text-sm cursor-pointer">
+                    Send Manual Command
+                </button>
+            </form>
+        </div>
+
+        <div id="response" class="lg:col-span-3 mt-4 space-y-3">
+            <h2 class="text-lg font-bold text-zinc-300 tracking-wide uppercase text-xs">Live Raw Output Feed</h2>
+
+            <div class="overflow-hidden border border-zinc-800 rounded-xl bg-zinc-900/20 backdrop-blur-sm shadow-2xl">
+                <table class="w-full border-collapse text-left">
+                    <thead>
+                        <tr
+                            class="border-b border-zinc-800 bg-zinc-900/60 text-xs font-semibold tracking-wider uppercase">
+                            <th class="p-4 w-1/2 text-blue-400 border-r border-zinc-800/60">Official Volvo Sandbox Feed
+                            </th>
+                            <th class="p-4 w-1/2 text-indigo-400">Volvo API Playground Feed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                            <td class="p-4 align-top border-r border-zinc-800/60 bg-zinc-950/40">
+                                <div id="OFFICIALoutput"
+                                    class="font-mono text-xs text-zinc-400 min-h-[120px] leading-relaxed whitespace-pre-wrap">
+                                    <p class="text-zinc-600 italic">// Awaiting payload transmission...</p>
+                                </div>
+                            </td>
+
+                            <td class="p-4 align-top bg-zinc-950/40">
+                                <div id="UNOFFICIALoutput"
+                                    class="font-mono text-xs text-zinc-400 min-h-[120px] leading-relaxed whitespace-pre-wrap">
+                                    <p class="text-zinc-600 italic">// Awaiting payload transmission...</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
 </body>
+
+</html>

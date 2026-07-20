@@ -1,57 +1,198 @@
-    
-<header>
-   <script src="https://unpkg.com/htmx.org@2.0.1/dist/htmx.min.js"></script> 
-</header>
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-zinc-950">
 
-<body>
-    <h1>login to both environments</h1>
-    <h2>Plaground login</h2>
-    <p>This app will create api key and car for unofficial volvo api playground using its internal endpoints.</p>
-    {% if state == 1 %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Volvo API Playground</title>
 
-    <p>Login successful!</p>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.1/dist/htmx.min.js"></script>
+</head>
 
-    {% else %}
-    <div>
-        <form hx-get="/login/automatic">
-            <button>click me</button>
-        </form>
+<body
+    class="min-h-full font-sans antialiased text-zinc-200 bg-zinc-950 flex flex-col items-center justify-center p-6 md:p-12">
+
+    <div class="max-w-xl w-full space-y-8">
+
+
+        <header class="text-center space-y-2">
+            <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight text-white">
+                Connect Environments
+            </h1>
+            <p class="text-zinc-400 text-sm md:text-base">
+                Authenticate both services to unlock side-by-side live comparison.
+            </p>
+        </header>
+
+        <main class="space-y-6">
+
+
+            <section class="p-6 bg-zinc-900/50 border border-zinc-800 rounded-2xl shadow-xl backdrop-blur-sm space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-zinc-100 flex items-center gap-2">
+                        <span
+                            class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold border border-indigo-500/20">1</span>
+                        Volvo API Playground Login
+                    </h2>
+                    {% if state == 1 or state == 2 %}
+                    <span
+                        class="px-2.5 py-0.5 text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full">Connected</span>
+                    {% else %}
+                    <span
+                        class="px-2.5 py-0.5 text-xs font-semibold bg-zinc-800 text-zinc-400 rounded-full">Pending</span>
+                    {% endif %}
+                </div>
+
+                <p class="text-zinc-400 text-xs md:text-sm leading-relaxed">
+                    This app will automatically provision a dedicated API key and dynamic mock vehicle inside the
+                    unofficial environment using internal system endpoints.
+                </p>
+
+                {% if state == 1 or state == 2 %}
+                <div
+                    class="p-3 bg-emerald-500/5 border border-emerald-500/10 rounded-xl flex items-center gap-2 text-emerald-400 text-sm">
+                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+                    Playground environment initialized successfully!
+                </div>
+                {% else %}
+                <div>
+                    <form hx-get="/login/automatic" class="w-full">
+                        <button type="submit"
+                            class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 active:scale-[0.99] text-white font-medium rounded-xl shadow-lg shadow-indigo-600/10 transition-all text-sm">
+                            Setup Playground Automatically
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+            </section>
+
+            <section class="p-6 bg-zinc-900/50 border border-zinc-800 rounded-2xl shadow-xl backdrop-blur-sm space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-zinc-100 flex items-center gap-2">
+                        <span
+                            class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/10 text-blue-400 text-xs font-bold border border-blue-500/20">2</span>
+                        Official Volvo Sandbox Credentials
+                    </h2>
+                    {% if state == 2 %}
+                    <span
+                        class="px-2.5 py-0.5 text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full">Connected</span>
+                    {% elif state == 1 %}
+                    <span
+                        class="px-2.5 py-0.5 text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full animate-pulse">Action
+                        Required</span>
+                    {% else %}
+                    <span
+                        class="px-2.5 py-0.5 text-xs font-semibold bg-zinc-800 text-zinc-500 rounded-full">Locked</span>
+                    {% endif %}
+                </div>
+
+
+                <div
+                    class="p-3.5 bg-amber-500/5 border border-amber-500/10 text-amber-400/90 rounded-xl text-xs space-y-1">
+                    <p class="font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                        </svg>
+                        Token Lifetime Notice:
+                    </p>
+                    <p class="text-zinc-400 leading-normal">
+                        An official developer account is required. The generated access token is strictly short-lived
+                        (<span class="text-amber-400">1 hour</span>) and must be manually provided here.
+                    </p>
+                </div>
+
+                {% if state == 1 %}
+
+                <form hx-get="/login/manual" class="space-y-3">
+                    <input type="text" name="api_key_p" hidden="True" value="{{ api_key_p }}" />
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-medium text-zinc-400">VCC API Key</label>
+                        <input type="text" placeholder="e.g. 4e2cfa72..." name="api_key_v" required
+                            class="w-full px-3.5 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" />
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-medium text-zinc-400">OAuth Access Token</label>
+                        <input type="text" placeholder="Bearer eyJhbGciOi..." name="access_token" required
+                            class="w-full px-3.5 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" />
+                    </div>
+
+                    <button type="submit"
+                        class="w-full mt-2 py-2.5 px-4 bg-zinc-100 hover:bg-white text-zinc-900 font-medium rounded-xl shadow-md transition-colors text-sm">
+                        Verify & Bind Sandbox
+                    </button>
+                </form>
+
+                {% elif state == 2 %}
+
+                <div class="space-y-3">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-medium text-zinc-500">Bound VCC API Key</label>
+                        <input type="text" disabled="True" value="{{ api_key_v }}"
+                            class="w-full px-3.5 py-2 bg-zinc-950/40 border border-zinc-800/60 rounded-xl text-sm text-zinc-500 cursor-not-allowed select-none" />
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-medium text-zinc-500">Bound Access Token</label>
+                        <input type="text" disabled="True" value="{{ access_token }}"
+                            class="w-full px-3.5 py-2 bg-zinc-950/40 border border-zinc-800/60 rounded-xl text-sm text-zinc-500 cursor-not-allowed select-none" />
+                    </div>
+                    <div
+                        class="p-3 bg-emerald-500/5 border border-emerald-500/10 rounded-xl flex items-center gap-2 text-emerald-400 text-sm">
+                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                        Manual integration established!
+                    </div>
+                </div>
+
+                {% else %}
+                <!-- Locked / Initial View -->
+                <div class="space-y-3 opacity-40 select-none pointer-events-none">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-medium text-zinc-500">VCC API Key</label>
+                        <input type="text" placeholder="Locked until Step 1 is complete" disabled="True"
+                            class="w-full px-3.5 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-sm cursor-not-allowed" />
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-medium text-zinc-500">OAuth Access Token</label>
+                        <input type="text" placeholder="Locked until Step 1 is complete" disabled="True"
+                            class="w-full px-3.5 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-sm cursor-not-allowed" />
+                    </div>
+                    <button disabled="True"
+                        class="w-full py-2.5 px-4 bg-zinc-800 text-zinc-500 font-medium rounded-xl text-sm cursor-not-allowed">
+                        Verify & Bind Sandbox
+                    </button>
+                </div>
+                {% endif %}
+            </section>
+
+
+            <form action="/compare" method="get" class="pt-2">
+                <input type="hidden" name="api_key_v" value="{{ api_key_v }}">
+                <input type="hidden" name="access_token" value="{{ access_token }}">
+                <input type="hidden" name="api_key_p" value="{{ api_key_p }}">
+
+                <button type="submit" {% if state !=2 %} disabled="True" {% endif %} class="w-full py-3.5 px-5 text-base font-semibold rounded-xl tracking-wide transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-zinc-950
+                        {% if state == 2 %}
+                            bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-indigo-600/10 hover:shadow-indigo-600/20 cursor-pointer active:scale-[0.98]
+                        {% else %}
+                            bg-zinc-900 border border-zinc-800/80 text-zinc-600 cursor-not-allowed opacity-50
+                        {% endif %}">
+                    Launch Dynamic Comparison
+                </button>
+            </form>
+        </main>
+
     </div>
-    {% endif %}
 
-    <h2>Official Volvo Sandbox login</h2>
-    <p>Now the harder part you need to manually input your api key and generate a access token.</p>
-    <p>DISCLAIMER: You need to create an acoount to generate an access token.</p>
-    <p>Be fast because the token is short lived (1 hour). It needs to be refreshed regularly.</p>
-    {% if state == 1 %}
-    
-    <form hx-get="/login/manual">
-        <input type="text" name="api_key_p" hidden="True" value="{{ api_key_p }}" />
-        <input type="text" placeholder="api key"  name="api_key_v"/>
-        <input type="text" placeholder="access token" name="access_token"/>
-        <button>login</button>
-    </form>
-    {% elif state == 2 %}
-     <form>
-    <input type="text" placeholder="api key" disabled="True" value="{{ api_key_v }}" />
-    <input type="text" placeholder="access token" disabled="True" value="{{ access_token }}" />
-    <p>Manual login successful!</p>
-    </form>
-    
-    {% else %}
-    <form>
-        <input type="text" placeholder="api key" disabled="True" />
-        <input type="text" placeholder="access token" disabled="True" />
-        <button  disabled="True" >login</button>
-    </form>
-    {% endif %}
-    <br>
+</body>
 
-    <form action="/compare" method="get">
-        <input type="hidden" name="api_key_v" value="{{ api_key_v }}">
-        <input type="hidden" name="access_token" value="{{ access_token }}">
-        <input type="hidden" name="api_key_p" value="{{ api_key_p }}">
-
-        <button type="submit" {% if state != 2 %} disabled="True" {% endif %} >Ready!</button>
-    </form>
-</body>   
+</html>
