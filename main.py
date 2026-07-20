@@ -131,7 +131,17 @@ def manual(request: Request, api_key_v: str, access_token: str , api_key_p: str)
 
 @app.get("/manual/command")
 def manual_command(request: Request, api_key_v: str, access_token: str , api_key_p: str, url: str, method: str = "GET", body: str = None):
-    return commandsFile.manual_command(api_key_v, access_token, api_key_p, url, method, body)
+    if body:
+        try:
+            body = json.loads(body)
+        except json.JSONDecodeError:
+            return JSONResponse(content={"error": "Invalid JSON in request body."})
+    data= commandsFile.manual_command(api_key_v, access_token, api_key_p, url, method, body)
+    return templates.TemplateResponse(
+        name="terminalOutput.html",
+        context={"official_response": data[0],"unofficial_response": data[1]},
+        request=request
+    )
 
 
 uvicorn.run(app,port=8001)
