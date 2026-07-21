@@ -93,7 +93,7 @@ def login_manual(api_key_v: str, access_token: str, api_key_p: str):
 def compare(request: Request, api_key_v: str, access_token: str , api_key_p: str):
     return templates.TemplateResponse(
         name="compare.html",
-        context={"api_key_v": api_key_v, "access_token": access_token, "api_key_p": api_key_p},
+        context={"api_key_v": api_key_v, "access_token": access_token, "api_key_p": api_key_p, "url_unofficial": unofficialURL},
         request=request
     )
 
@@ -123,6 +123,7 @@ def get_commands(request: Request,api_key_v: str, access_token: str , api_key_p:
 
 @app.get("/manual")
 def manual(request: Request, api_key_v: str, access_token: str , api_key_p: str):
+
     return templates.TemplateResponse(
         name="compareManual.html",
         context={"api_key_v": api_key_v, "access_token": access_token, "api_key_p": api_key_p, "VINofficial": VINofficial, "VINunofficial": VINunofficial},
