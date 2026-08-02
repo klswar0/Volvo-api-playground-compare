@@ -24,6 +24,7 @@ def sendUnofficialRequest(url: str, headers: dict,method: str = "GET",body: dict
     try:
         if method == "POST":
             if body is None:
+                headers["Content-Type"] = "application/json"
                 response = requests.post(f"{unofficialURL}{url}", headers=headers)
             else:
                 response = requests.post(f"{unofficialURL}{url}", headers=headers, json=body)

@@ -144,5 +144,5 @@ def manual_command(request: Request, api_key_v: str, access_token: str , api_key
         request=request
     )
 
-
-uvicorn.run(app,port=8001)
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8001)
