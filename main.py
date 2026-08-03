@@ -143,6 +143,10 @@ def manual_command(request: Request, api_key_v: str, access_token: str , api_key
         context={"official_response": data[0],"unofficial_response": data[1]},
         request=request
     )
+    
+@app.get("/styles.css")
+def styles():
+    return FileResponse("templates/styles.css")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8001)
