@@ -10,6 +10,9 @@ The code for the simulated alternative environment, and full documentation can b
 
  **[Volvo API Playground - Main Repository](https://github.com/klswar0/Volvo-API-playground)** 
 
+### DISCLAIMER
+I used this project for learning tailwind so it can be more AI generated than what i want, but it is one time use app sooo i dont want to update it
+
 ---
 
 ### Tech used
