@@ -1,5 +1,20 @@
-VINofficial = "YV4952NA4F120DEMO"  # change this to your car's VIN for official API testing
-VINunofficial = "YV4952NA4F120DEMO"  # change this to your car's VIN for unofficial API testing
+import configparser
 
-officialURL = "https://api.volvocars.com/connected-vehicle/v2"
-unofficialURL = "https://playground.kls.hackclub.app/"
+config = configparser.ConfigParser()
+config['VIN'] = {
+    'official': 'YV4952NA4F120DEMO',  
+    'unofficial': 'YV4952NA4F120DEMO'  
+}
+
+config['URL'] = {
+    'official': 'https://api.volvocars.com/connected-vehicle/v2',
+    'unofficial': 'https://playground.kls.hackclub.app/'
+}
+
+config.read('config.ini')
+
+VINofficial = config['VIN']['official']
+VINunofficial = config['VIN']['unofficial']
+
+officialURL = config['URL']['official']
+unofficialURL = config['URL']['unofficial']
