@@ -55,7 +55,7 @@ def login_automatic():
         url=f"{unofficialURL}/internal/addCar"
         header = {"vcc-api-key": api_key}
         body={"VIN": VINunofficial,
-            "attributes": {"fuelICE": 120, "fuelElectric": 80, "odometer": 10000, "oillevel": "TOO_LOW", "hazardLightsWarning": "FAILURE","frontLeft": "VERY_LOW_PRESSURE","frontRight": "LOW_PRESSURE","rearLeft": "UNSPECIFIED","rearRight": "NO_WARNING"}}
+            "attributes": {"fuelICE": 120, "fuelElectric": 80, "odometer": 10000, "oilLevel": "TOO_LOW", "hazardLightsWarning": "FAILURE","frontLeft": "VERY_LOW_PRESSURE","frontRight": "LOW_PRESSURE","rearLeft": "UNSPECIFIED","rearRight": "NO_WARNING"}}
         response = requests.post(url, headers=header, json=body)
         if response.status_code != 200:
             return JSONResponse(content={"error": "Failed to add car.","detail": response.json()}) #html
