@@ -3,7 +3,7 @@ import json
 from app_config import officialURL, unofficialURL, VINofficial, VINunofficial
 import requests
 
-#post version needed
+
 def sendOfficialRequest(url: str, headers: dict,method: str = "GET",body: dict = None):
     try:
         if method == "POST":
