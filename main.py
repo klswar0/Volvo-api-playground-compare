@@ -43,7 +43,7 @@ def login(request: Request, api_key_p: str = Query(default=None),api_key_v: str 
 @app.get("/login/automatic")
 def login_automatic():
     try:
-        url=f"{unofficialURL}/internal/APIKey"
+        url=f"{unofficialURL.replace('/connected-vehicle/v2', '')}/internal/APIKey"
         response = requests.get(url)
         api_key = response.json().get("message")
         print(f"Retrieved API key: {api_key}")
@@ -52,7 +52,7 @@ def login_automatic():
     except Exception as e:
         return JSONResponse(content={"error": str(e)})
     try:
-        url=f"{unofficialURL}/internal/addCar"
+        url=f"{unofficialURL.replace('/connected-vehicle/v2', '')}/internal/addCar"
         header = {"vcc-api-key": api_key}
         body={"VIN": VINunofficial,
             "attributes": {"fuelICE": 120, "fuelElectric": 80, "odometer": 10000, "oilLevel": "TOO_LOW", "hazardLightsWarning": "FAILURE","frontLeft": "VERY_LOW_PRESSURE","frontRight": "LOW_PRESSURE","rearLeft": "UNSPECIFIED","rearRight": "NO_WARNING","frontLeftDoor":"OPEN","frontRightDoor":"OPEN","rearLeftDoor":"AJAR","rearRightDoor":"CLOSED"}}
