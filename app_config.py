@@ -8,7 +8,7 @@ config['VIN'] = {
 
 config['URL'] = {
     'official': 'https://api.volvocars.com/connected-vehicle/v2',
-    'unofficial': 'https://playground.kls.hackclub.app/'
+    'unofficial': 'https://playground.kls.hackclub.app/connected-vehicle/v2'
 }
 
 config.read('config.ini')
